@@ -15,34 +15,49 @@ import com.skala.basic.data.HelloResponse;
 import com.skala.basic.service.CourseService;
 import com.skala.basic.service.HelloService;
 
-import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 
 @RestController
 @Slf4j
+@RequiredArgsConstructor
 public class HelloController {
 
   private final HelloService helloService;
+
   private final CourseService courseService;
 
-  // 생성자 주입
-  public HelloController(HelloService helloService, CourseService courseService) {
-    this.helloService = helloService;
-    this.courseService = courseService;
-  }
-
   @GetMapping("/hello")
-  public HelloResponse hello(@RequestParam(defaultValue = "SKALA") String name) {
-    // 서비스 호출하여 응답 객체 생성
-    log.info("/hello: GET {}", name);
-    return helloService.createMessage(name);
+  public HelloResponse getHello(@RequestParam String name, @RequestParam int age) {
+    // log.info("getHello name={}, age={}", name, age);
+    // log.debug("getHello name={}, age={}", name, age);
+    // log.error("getHello name={}, age={}", name, age);
+    HelloResponse response = helloService.createMessage(name, age);
+
+    return response;
   }
 
   @PostMapping("/hello")
-  public HelloResponse postHello(@Valid @RequestBody HelloRequest body) {
-    log.info("/hello: POST {}", body.getName());
-    return helloService.createMessage(body.getName());
+  public HelloResponse postHello(@RequestBody HelloRequest body) {
+    HelloResponse response = helloService.createMessage(body.getName(), 25);
+      
+      return response;
   }
+  
+
+  // @GetMapping("/hello")
+  // public HelloResponse hello(@RequestParam(defaultValue = "SKALA") String name) {
+  //   // 서비스 호출하여 응답 객체 생성
+  //   log.info("/hello: GET {}", name);
+  //   return helloService.createMessage(name);
+  // }
+
+  // @PostMapping("/hello")
+  // public HelloResponse postHello(@Valid @RequestBody HelloRequest body) {
+  //   log.info("/hello: POST {}", body.getName());
+  //   return helloService.createMessage(body.getName());
+  // }
 
   @PostMapping("/courses/{name}")
   public CourseResponse getClassInfo(@PathVariable String name, @RequestParam List<String> topics) {
