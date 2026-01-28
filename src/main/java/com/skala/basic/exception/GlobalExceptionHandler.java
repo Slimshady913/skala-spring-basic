@@ -22,4 +22,9 @@ public class GlobalExceptionHandler {
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
   }
 
+  @ExceptionHandler(NullPointerException.class)
+  public ResponseEntity<String> handleNullPointerException(NullPointerException ex) {
+    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("A null pointer exception occurred: " + ex.getMessage());
+  }
+
 }
